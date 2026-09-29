@@ -1,6 +1,14 @@
 node_modules/
+
 .tmp-chrome-profile/
 .tmp-chrome-profile-*/
+
+.tmp-hero-screenshot.png
+
+.vite-*.err.log
+.vite-*.out.log
+
 .env
 .env.local
+
 *.log
