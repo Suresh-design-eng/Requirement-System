@@ -1,4 +1,4 @@
-from sqlalchemy import Float, ForeignKey, Index, String, Text, UniqueConstraint
+from sqlalchemy import Float, ForeignKey, Index, JSON, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
@@ -23,6 +23,9 @@ class Candidate(Base, TimestampMixin, SoftDeleteMixin):
     summary: Mapped[str | None] = mapped_column(Text, nullable=True)
     experience_years: Mapped[float | None] = mapped_column(Float, nullable=True)
     current_status: Mapped[str] = mapped_column(String(50), default="active", nullable=False)
+    # Flexible, non-sensitive candidate settings that do not belong to identity
+    # or recruitment workflow columns (education and portfolio links, for example).
+    profile_data: Mapped[dict | None] = mapped_column(JSON, nullable=True)
 
     user = relationship("User", back_populates="candidate_profile")
     company = relationship("Company")

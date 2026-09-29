@@ -8,6 +8,12 @@ class UserUpdate(BaseModel):
     phone: str | None = Field(default=None, max_length=40)
     location: str | None = Field(default=None, max_length=180)
     experience_years: float | None = Field(default=None, ge=0)
+    skills: list[str] | None = None
+    education: str | None = Field(default=None, max_length=500)
+    portfolio_url: str | None = Field(default=None, max_length=500)
+    github_url: str | None = Field(default=None, max_length=500)
+    linkedin_url: str | None = Field(default=None, max_length=500)
+    expected_salary: str | None = Field(default=None, max_length=120)
 
 
 class RequirementWrite(BaseModel):

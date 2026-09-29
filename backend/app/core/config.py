@@ -22,6 +22,9 @@ class Settings(BaseSettings):
     env_file_encoding="utf-8",
     case_sensitive=False,
     extra="ignore",
+    # CORS_ORIGINS is intentionally comma-separated (rather than JSON) so it is
+    # practical to set in Render's environment-variable UI.
+    enable_decoding=False,
   )
 
   @field_validator("cors_origins", mode="before")

@@ -8,6 +8,7 @@ from sqlalchemy import (
     ForeignKey,
     Index,
     Integer,
+    JSON,
     String,
     Text,
 )
@@ -53,6 +54,7 @@ class Job(Base, TimestampMixin, SoftDeleteMixin):
     published_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     closed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     deadline: Mapped[date | None] = mapped_column(Date, nullable=True)
+    details: Mapped[dict | None] = mapped_column(JSON, nullable=True)
 
     company = relationship("Company", back_populates="jobs")
     requirement = relationship("Requirement", back_populates="jobs")

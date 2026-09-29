@@ -79,12 +79,16 @@ def _skills(db: Session, names: list[str]) -> list[Skill]:
 
 def _user(user: User) -> dict:
     candidate = user.candidate_profile
+    profile = candidate.profile_data or {} if candidate else {}
     return {
         "id": user.id, "name": user.full_name, "email": user.email,
         "role": "admin" if user.role.name == ROLE_ADMIN else "user", "phone": user.phone,
         "location": candidate.location if candidate else None,
         "experienceYears": candidate.experience_years if candidate else None,
         "skills": [link.skill.name for link in candidate.skills] if candidate else [],
+        "education": profile.get("education"), "portfolioUrl": profile.get("portfolio_url"),
+        "githubUrl": profile.get("github_url"), "linkedinUrl": profile.get("linkedin_url"),
+        "expectedSalary": profile.get("expected_salary"),
     }
 
 
@@ -103,8 +107,8 @@ def _job(item: Job) -> dict:
         "adminName": item.recruiter.full_name if item.recruiter else "Requirement System",
         "description": item.description, "department": item.department, "location": item.location,
         "type": item.employment_type.replace("_", "-"),
-        "salary": _salary(item.salary_min, item.salary_max, item.salary_currency),
-        "requirements": [line for line in item.description.split("\n") if line.strip()][1:] or [],
+        "salary": (item.details or {}).get("salary") or _salary(item.salary_min, item.salary_max, item.salary_currency),
+        "requirements": (item.details or {}).get("requirements") or [],
         "skills": [link.skill.name for link in item.skills],
         "experienceYearsRequired": item.experience_min_years or 0,
         "postedDate": (item.posted_at or item.created_at).date().isoformat(),
@@ -145,8 +149,13 @@ def _interview_type(interview: Interview | None) -> str | None:
 
 
 def _state(db: Session, current_user: User) -> dict:
-    users = db.scalars(select(User).options(joinedload(User.role), joinedload(User.candidate_profile).joinedload(Candidate.skills).joinedload(CandidateSkill.skill)).where(User.deleted_at.is_(None))).unique().all()
-    requirements = db.scalars(select(Requirement).options(joinedload(Requirement.created_by)).where(Requirement.deleted_at.is_(None))).unique().all()
+    users_query = select(User).options(joinedload(User.role), joinedload(User.candidate_profile).joinedload(Candidate.skills).joinedload(CandidateSkill.skill)).where(User.deleted_at.is_(None))
+    requirements_query = select(Requirement).options(joinedload(Requirement.created_by)).where(Requirement.deleted_at.is_(None))
+    if current_user.role.name == ROLE_CANDIDATE:
+        users_query = users_query.where(User.id == current_user.id)
+        requirements_query = requirements_query.where(Requirement.id.is_(None))
+    users = db.scalars(users_query).unique().all()
+    requirements = db.scalars(requirements_query).unique().all()
     jobs = db.scalars(select(Job).options(joinedload(Job.company), joinedload(Job.recruiter), joinedload(Job.skills).joinedload(JobSkill.skill)).where(Job.deleted_at.is_(None), Job.status == "published")).unique().all()
     if current_user.role.name in RECRUITING_STAFF_ROLES:
         jobs = db.scalars(select(Job).options(joinedload(Job.company), joinedload(Job.recruiter), joinedload(Job.skills).joinedload(JobSkill.skill)).where(Job.deleted_at.is_(None))).unique().all()
@@ -186,6 +195,20 @@ def update_me(payload: UserUpdate, current_user: User = Depends(get_current_user
             candidate.location = payload.location.strip() or None
         if payload.experience_years is not None:
             candidate.experience_years = payload.experience_years
+        if payload.skills is not None:
+            candidate.skills.clear()
+            candidate.skills.extend(CandidateSkill(skill_id=skill.id) for skill in _skills(db, payload.skills))
+        profile = dict(candidate.profile_data or {})
+        for key, value in {
+            "education": payload.education,
+            "portfolio_url": payload.portfolio_url,
+            "github_url": payload.github_url,
+            "linkedin_url": payload.linkedin_url,
+            "expected_salary": payload.expected_salary,
+        }.items():
+            if value is not None:
+                profile[key] = value.strip() or None
+        candidate.profile_data = profile
     AuditService(db).log(action="user.updated", entity_type="user", entity_id=current_user.id, actor_id=current_user.id)
     db.commit()
     return _user(current_user)
@@ -224,7 +247,7 @@ def delete_requirement(requirement_id: str, current_user: User = Depends(require
 
 @router.post("/jobs", status_code=status.HTTP_201_CREATED)
 def create_job(payload: JobWrite, current_user: User = Depends(require_roles(*RECRUITING_STAFF_ROLES)), db: Session = Depends(get_db)) -> dict:
-    item = Job(company_id=_company(db).id, recruiter_id=current_user.id, title=payload.title.strip(), description=payload.description.strip(), department=payload.department.strip(), location=payload.location.strip(), employment_type=payload.type.replace("-", "_"), status=payload.status, experience_min_years=payload.experience_years_required, deadline=_date(payload.deadline), posted_at=datetime.now(timezone.utc) if payload.status == "published" else None)
+    item = Job(company_id=_company(db).id, recruiter_id=current_user.id, title=payload.title.strip(), description=payload.description.strip(), department=payload.department.strip(), location=payload.location.strip(), employment_type=payload.type.replace("-", "_"), status=payload.status, experience_min_years=payload.experience_years_required, deadline=_date(payload.deadline), posted_at=datetime.now(timezone.utc) if payload.status == "published" else None, details={"salary": payload.salary, "requirements": payload.requirements})
     db.add(item); db.flush()
     item.skills = [JobSkill(skill_id=skill.id) for skill in _skills(db, payload.skills)]
     AuditService(db).log(action="job.created", entity_type="job", entity_id=item.id, actor_id=current_user.id)
@@ -239,6 +262,7 @@ def update_job(job_id: str, payload: JobWrite, current_user: User = Depends(requ
         raise HTTPException(404, "Job not found.")
     item.title, item.description, item.department, item.location = payload.title.strip(), payload.description.strip(), payload.department.strip(), payload.location.strip()
     item.employment_type, item.status, item.experience_min_years, item.deadline = payload.type.replace("-", "_"), payload.status, payload.experience_years_required, _date(payload.deadline)
+    item.details = {"salary": payload.salary, "requirements": payload.requirements}
     item.skills.clear(); item.skills.extend(JobSkill(skill_id=skill.id) for skill in _skills(db, payload.skills))
     AuditService(db).log(action="job.updated", entity_type="job", entity_id=item.id, actor_id=current_user.id)
     db.commit(); db.refresh(item)

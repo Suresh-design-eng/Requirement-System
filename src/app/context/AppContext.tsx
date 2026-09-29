@@ -584,6 +584,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
           phone: userData.phone,
           location: userData.location,
           experience_years: userData.experienceYears,
+          skills: userData.skills,
+          education: userData.education,
+          portfolio_url: userData.portfolioUrl,
+          github_url: userData.githubUrl,
+          linkedin_url: userData.linkedinUrl,
+          expected_salary: userData.expectedSalary,
         }).then(() => refreshRemoteState()).catch(() => undefined)
       }
       return
