@@ -18,6 +18,7 @@ import {
   mockRequirements,
   mockUsers,
 } from '../utils/mockData'
+import { apiJson, apiRequest, setAccessToken } from '../services/api'
 
 interface UserRecord extends User {
   password?: string
@@ -317,6 +318,7 @@ function createDefaultApplications() {
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const [storedUsers, setStoredUsers] = useState<UserRecord[]>(() => {
+    if (authMode === 'remote') return []
     const stored = readStorage<UserRecord[]>(STORAGE_KEYS.users, [])
     return stored.length > 0
       ? stored.map((user, index) =>
@@ -325,15 +327,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
       : createDefaultUsers()
   })
   const [requirements, setRequirements] = useState<Requirement[]>(() =>
-    readStorage<Requirement[]>(STORAGE_KEYS.requirements, createDefaultRequirements())
+    authMode === 'remote' ? [] : readStorage<Requirement[]>(STORAGE_KEYS.requirements, createDefaultRequirements())
   )
   const [jobs, setJobs] = useState<Job[]>(() =>
-    readStorage<Job[]>(STORAGE_KEYS.jobs, createDefaultJobs()).map(normalizeJobRecord)
+    authMode === 'remote' ? [] : readStorage<Job[]>(STORAGE_KEYS.jobs, createDefaultJobs()).map(normalizeJobRecord)
   )
   const [applications, setApplications] = useState<Application[]>(() =>
-    readStorage<Application[]>(STORAGE_KEYS.applications, createDefaultApplications()).map(
-      normalizeApplicationRecord
-    )
+    authMode === 'remote' ? [] : readStorage<Application[]>(STORAGE_KEYS.applications, createDefaultApplications()).map(normalizeApplicationRecord)
   )
   const [authSession, setAuthSession] = useState<SessionState | null>(() =>
     readStorage<SessionState | null>(STORAGE_KEYS.session, null)
@@ -352,19 +352,19 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [])
 
   useEffect(() => {
-    writeStorage(STORAGE_KEYS.users, storedUsers)
+    if (authMode === 'local') writeStorage(STORAGE_KEYS.users, storedUsers)
   }, [storedUsers])
 
   useEffect(() => {
-    writeStorage(STORAGE_KEYS.requirements, requirements)
+    if (authMode === 'local') writeStorage(STORAGE_KEYS.requirements, requirements)
   }, [requirements])
 
   useEffect(() => {
-    writeStorage(STORAGE_KEYS.jobs, jobs)
+    if (authMode === 'local') writeStorage(STORAGE_KEYS.jobs, jobs)
   }, [jobs])
 
   useEffect(() => {
-    writeStorage(STORAGE_KEYS.applications, applications)
+    if (authMode === 'local') writeStorage(STORAGE_KEYS.applications, applications)
   }, [applications])
 
   useEffect(() => {
@@ -386,6 +386,27 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setAuthSession(null)
     }
   }, [authSession, currentUserRecord])
+
+  const refreshRemoteState = async () => {
+    if (authMode !== 'remote') return
+    const state = await apiRequest<{
+      currentUser: User
+      users: User[]
+      requirements: Requirement[]
+      jobs: Job[]
+      applications: Application[]
+    }>('/api/v1/platform/state')
+    setStoredUsers(state.users.map(user => normalizeUserRecord(user)))
+    setRequirements(state.requirements)
+    setJobs(state.jobs.map(normalizeJobRecord))
+    setApplications(state.applications.map(normalizeApplicationRecord))
+  }
+
+  useEffect(() => {
+    if (authMode !== 'remote' || !authSession) return
+    setAccessToken(authSession.token)
+    void refreshRemoteState().catch(() => setAuthSession(null))
+  }, [authSession?.token])
 
   const login = async (email: string, password: string) => {
     const normalizedEmail = email.trim().toLowerCase()
@@ -412,11 +433,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
       }
 
       if (remoteResult.success && remoteResult.user) {
+        setAccessToken(remoteResult.token || null)
         setStoredUsers(previousUsers => upsertUserRecord(previousUsers, remoteResult.user!))
         setAuthSession({
           userId: remoteResult.user.id,
           token: remoteResult.token || `session-${remoteResult.user.id}`,
         })
+        await refreshRemoteState()
       }
 
       return remoteResult
@@ -481,11 +504,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
       }
 
       if (remoteResult.success && remoteResult.user) {
+        setAccessToken(remoteResult.token || null)
         setStoredUsers(previousUsers => upsertUserRecord(previousUsers, remoteResult.user!))
         setAuthSession({
           userId: remoteResult.user.id,
           token: remoteResult.token || `session-${remoteResult.user.id}`,
         })
+        await refreshRemoteState()
       }
 
       return remoteResult
@@ -526,10 +551,19 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }
 
   const logout = () => {
+    if (authMode === 'remote') {
+      void apiJson('/api/v1/auth/logout', 'POST').catch(() => undefined)
+      setAccessToken(null)
+    }
     setAuthSession(null)
   }
 
   const addUser = (user: Omit<User, 'id'>) => {
+    if (authMode === 'remote') {
+      // User creation remains deliberately server-controlled: candidates register
+      // through the public auth endpoint and administrators are provisioned by CLI.
+      return
+    }
     const newUser = normalizeUserRecord(
       {
         ...user,
@@ -543,6 +577,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }
 
   const updateUser = (id: string, userData: Partial<User>) => {
+    if (authMode === 'remote') {
+      if (id === authSession?.userId) {
+        void apiJson('/api/v1/platform/users/me', 'PATCH', {
+          name: userData.name,
+          phone: userData.phone,
+          location: userData.location,
+          experience_years: userData.experienceYears,
+        }).then(() => refreshRemoteState()).catch(() => undefined)
+      }
+      return
+    }
     setStoredUsers(previousUsers =>
       previousUsers.map(user =>
         user.id === id
@@ -560,6 +605,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }
 
   const deleteUser = (id: string) => {
+    if (authMode === 'remote') return
     setStoredUsers(previousUsers => previousUsers.filter(user => user.id !== id))
     setApplications(previousApplications =>
       previousApplications.filter(application => application.userId !== id)
@@ -571,6 +617,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }
 
   const addRequirement = (requirement: Omit<Requirement, 'id' | 'createdAt'>) => {
+    if (authMode === 'remote') {
+      void apiJson('/api/v1/platform/requirements', 'POST', requirement)
+        .then(() => refreshRemoteState()).catch(() => undefined)
+      return
+    }
     setRequirements(previousRequirements => [
       ...previousRequirements,
       {
@@ -582,6 +633,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }
 
   const updateRequirement = (id: string, requirementData: Partial<Requirement>) => {
+    if (authMode === 'remote') {
+      const current = requirements.find(item => item.id === id)
+      if (current) {
+        void apiJson(`/api/v1/platform/requirements/${id}`, 'PATCH', { ...current, ...requirementData })
+          .then(() => refreshRemoteState()).catch(() => undefined)
+      }
+      return
+    }
     setRequirements(previousRequirements =>
       previousRequirements.map(requirement =>
         requirement.id === id ? { ...requirement, ...requirementData } : requirement
@@ -590,12 +649,24 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }
 
   const deleteRequirement = (id: string) => {
+    if (authMode === 'remote') {
+      void apiRequest(`/api/v1/platform/requirements/${id}`, { method: 'DELETE' })
+        .then(() => refreshRemoteState()).catch(() => undefined)
+      return
+    }
     setRequirements(previousRequirements =>
       previousRequirements.filter(requirement => requirement.id !== id)
     )
   }
 
   const addJob = (job: Omit<Job, 'id' | 'postedDate'>) => {
+    if (authMode === 'remote') {
+      void apiJson('/api/v1/platform/jobs', 'POST', {
+        ...job,
+        experience_years_required: job.experienceYearsRequired,
+      }).then(() => refreshRemoteState()).catch(() => undefined)
+      return
+    }
     setJobs(previousJobs => [
       ...previousJobs,
       normalizeJobRecord({
@@ -607,6 +678,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }
 
   const updateJob = (id: string, jobData: Partial<Job>) => {
+    if (authMode === 'remote') {
+      const current = jobs.find(item => item.id === id)
+      if (current) {
+        const merged = { ...current, ...jobData }
+        void apiJson(`/api/v1/platform/jobs/${id}`, 'PATCH', {
+          ...merged,
+          experience_years_required: merged.experienceYearsRequired,
+        }).then(() => refreshRemoteState()).catch(() => undefined)
+      }
+      return
+    }
     setJobs(previousJobs =>
       previousJobs.map(job =>
         job.id === id ? normalizeJobRecord({ ...job, ...jobData }) : job
@@ -615,6 +697,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }
 
   const deleteJob = (id: string) => {
+    if (authMode === 'remote') {
+      void apiRequest(`/api/v1/platform/jobs/${id}`, { method: 'DELETE' })
+        .then(() => refreshRemoteState()).catch(() => undefined)
+      return
+    }
     setJobs(previousJobs => previousJobs.filter(job => job.id !== id))
     setApplications(previousApplications =>
       previousApplications.filter(application => application.jobId !== id)
@@ -644,6 +731,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const rejectJob = (jobId: string) => {
     if (!currentUserRecord) {
+      return
+    }
+
+    if (authMode === 'remote') {
+      const existing = applications.find(item => item.jobId === jobId && item.userId === currentUserRecord.id)
+      if (existing) {
+        void apiJson(`/api/v1/platform/applications/${existing.id}/status`, 'PATCH', { status: 'rejected' })
+          .then(() => refreshRemoteState()).catch(() => undefined)
+      }
       return
     }
 
@@ -688,6 +784,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
     applicationId: string,
     status: Application['status']
   ): ActionResult => {
+    if (authMode === 'remote') {
+      void apiJson(`/api/v1/platform/applications/${applicationId}/status`, 'PATCH', { status })
+        .then(() => refreshRemoteState()).catch(() => undefined)
+      return { success: true, message: 'Application status update requested.' }
+    }
+
     let result: ActionResult = {
       success: false,
       message: 'Unable to update this application right now.',
@@ -779,6 +881,31 @@ export function AppProvider({ children }: { children: ReactNode }) {
       return {
         success: false,
         message: 'You have already applied to this job.',
+      }
+    }
+
+    if (authMode === 'remote') {
+      if (payload.resumeFile || currentUserRecord.resumeUrl) {
+        return {
+          success: false,
+          message: 'Resume storage is not configured for this deployment yet. Your file has not been uploaded.',
+        }
+      }
+      try {
+        await apiJson('/api/v1/platform/applications', 'POST', {
+          job_id: payload.jobId,
+          full_name: fullName,
+          email,
+          phone,
+          skills,
+          experience_years: experienceYears,
+          cover_letter: coverLetter,
+          availability: payload.availability,
+        })
+        await refreshRemoteState()
+        return { success: true, message: 'Application submitted successfully.' }
+      } catch (error) {
+        return { success: false, message: error instanceof Error ? error.message : 'Unable to submit this application.' }
       }
     }
 
@@ -876,6 +1003,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
     date: string,
     linkOrLocation: string
   ) => {
+    if (authMode === 'remote') {
+      void apiJson('/api/v1/platform/interviews', 'POST', {
+        application_id: applicationId,
+        type,
+        scheduled_at: date,
+        link_or_location: linkOrLocation,
+      }).then(() => refreshRemoteState()).catch(() => undefined)
+      return
+    }
     setApplications(previousApplications =>
       previousApplications.map(application =>
         application.id === applicationId &&
@@ -897,6 +1033,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const uploadResume = async (file: File) => {
     if (!currentUserRecord) {
       return
+    }
+
+    if (authMode === 'remote') {
+      throw new Error('Resume storage is not configured for this deployment. The selected file was not uploaded.')
     }
 
     const resumeValidationError = validateResumeFile(file)

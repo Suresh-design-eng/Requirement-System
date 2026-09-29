@@ -1,4 +1,5 @@
 import type { User } from '../utils/mockData'
+import { apiJson, apiMode } from './api'
 
 export type AuthMode = 'local' | 'remote'
 
@@ -18,11 +19,10 @@ export interface AuthResult {
   user?: User
 }
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL?.trim()
 const loginPath = import.meta.env.VITE_AUTH_LOGIN_PATH?.trim() || '/api/v1/auth/login'
 const registerPath = import.meta.env.VITE_AUTH_REGISTER_PATH?.trim() || '/api/v1/auth/register'
 
-export const authMode: AuthMode = apiBaseUrl ? 'remote' : 'local'
+export const authMode: AuthMode = apiMode
 
 export const demoCredentials = [
   {
@@ -36,14 +36,6 @@ export const demoCredentials = [
     password: 'User@123',
   },
 ] as const
-
-function buildApiUrl(pathname: string) {
-  if (!apiBaseUrl) {
-    return ''
-  }
-
-  return new URL(pathname, apiBaseUrl.endsWith('/') ? apiBaseUrl : `${apiBaseUrl}/`).toString()
-}
 
 function createAvatarUrl(seed: string) {
   return `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(seed)}`
@@ -93,6 +85,7 @@ function extractAuthResult(payload: unknown) {
     message?: unknown
     token?: unknown
     accessToken?: unknown
+    access_token?: unknown
     user?: unknown
     data?: {
       token?: unknown
@@ -111,6 +104,8 @@ function extractAuthResult(payload: unknown) {
     token:
       typeof container.token === 'string'
         ? container.token
+        : typeof container.access_token === 'string'
+          ? container.access_token
         : typeof container.accessToken === 'string'
           ? container.accessToken
           : typeof nestedData?.token === 'string'
@@ -124,32 +119,17 @@ function extractAuthResult(payload: unknown) {
 }
 
 async function postAuthRequest(pathname: string, payload: AuthCredentials | RegistrationData) {
-  if (!apiBaseUrl) {
+  if (authMode !== 'remote') {
     return null
   }
 
-  const response = await fetch(buildApiUrl(pathname), {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    },
-    credentials: 'include',
-    body: JSON.stringify(payload),
-  })
-
-  let body: unknown = null
-
+  let body: unknown
   try {
-    body = await response.json()
-  } catch {
-    body = null
-  }
-
-  if (!response.ok) {
+    body = await apiJson<unknown>(pathname, 'POST', payload)
+  } catch (error) {
     return {
       success: false,
-      message: extractMessage(body, `Authentication request failed (${response.status}).`),
+      message: error instanceof Error ? error.message : 'Authentication request failed.',
     } satisfies AuthResult
   }
 
