@@ -1,642 +1,467 @@
-Recruitment & Hiring Management Platform
+# Recruitment & Hiring Management Platform
 
-A structured recruitment platform for managing requirements, jobs, candidates, applications, resumes, interviews, and evidence-based candidate evaluation in one system.
+A structured full-stack recruitment platform for managing requirements, jobs, candidates, applications, resumes, interviews, and evidence-based candidate evaluation in one centralized system.
 
-The Recruitment & Hiring Management Platform is designed to bring the complete recruitment lifecycle into a centralized, scalable application.
+The **Recruitment & Hiring Management Platform** connects the complete recruitment lifecycle into a single workflow — from defining recruitment requirements and creating job openings to candidate applications, resume analysis, screening, interviews, evaluation, hiring decisions, and analytics.
 
-Instead of treating recruitment as a collection of disconnected activities, the platform connects requirements, job creation, candidates, applications, resumes, screening, interviews, evaluation, and analytics into a single workflow.
+The platform is built with a modern **React + TypeScript frontend** and **FastAPI + PostgreSQL backend**, with a strong focus on secure authentication, modular architecture, explainable candidate evaluation, and maintainable software design.
 
-The platform is being developed with a modern React + TypeScript frontend and a FastAPI + PostgreSQL backend, with a strong focus on secure authentication, modular architecture, explainable candidate evaluation, and maintainable software design.
+---
 
-✦ What This Platform Solves
+## Stack
 
-Recruitment involves multiple stages and different types of information:
+**Frontend:** React + TypeScript + Vite + React Router + Tailwind CSS / Reusable UI Components
 
-Recruitment requirements
+**Backend:** FastAPI + Python + Pydantic + SQLAlchemy
 
-Job creation and management
+**Database:** PostgreSQL
 
-Candidate profiles
+**Database Migrations:** Alembic
 
-Applications
+**Authentication:** Password hashing + Access Tokens + Role-Based Authorization
 
-Resume collection
+**API:** REST
 
-Resume analysis
+**Testing:** Python Backend Tests + TypeScript Build Verification
 
-Skill and experience matching
+**Document Intelligence:** Resume Processing + Requirement/Skill Matching
 
-Candidate screening
+---
 
-Shortlisting
+# Main Features
 
-Interviews
+### Requirement Management
 
-Hiring decisions
+* Create and manage recruitment requirements
+* Define required skills, qualifications, and job expectations
+* Use requirements as the foundation for job creation and evaluation
 
-Recruitment analytics
+### Job Management
 
-When these activities are handled separately, important candidate information can become difficult to track and evaluate consistently.
+* Create and manage job openings
+* Connect jobs with recruitment requirements
+* Track job status and recruitment information
 
-This platform connects these stages into one structured recruitment workflow.
+### Candidate Management
 
-Core Lifecycle
+* Maintain candidate profiles
+* Store candidate-related information
+* Connect candidates with applications and resumes
 
-flowchart LR
-    A[Requirement] --> B[Job]
-    B --> C[Candidate]
-    C --> D[Application]
-    D --> E[Resume]
-    E --> F[Screening]
-    F --> G[Shortlisting]
-    G --> H[Interview]
-    H --> I[Evaluation]
-    I --> J[Decision]
-    J --> K[Analytics]
+### Application Management
 
-01 · Product Overview
+* Submit applications for specific jobs
+* Track application status
+* Maintain the relationship between candidates and job openings
 
-The platform provides different capabilities for different recruitment activities.
+### Resume Management
 
-Area
+* Upload candidate resumes
+* Store resume information
+* Process resumes for job-specific analysis
 
-Purpose
+### Resume Intelligence
 
-Requirement Management
+* Extract information from uploaded resumes
+* Identify skills, experience, education, and relevant evidence
+* Compare candidate information against a selected job
 
-Define and manage recruitment requirements
+### Candidate Matching
 
-Job Management
+* Analyze candidate-job compatibility
+* Compare skills and requirements
+* Evaluate relevant experience and education
+* Generate explainable matching information
 
-Create, update, and manage job openings
+### Screening & Shortlisting
 
-Candidate Management
+* Support structured candidate screening
+* Identify requirement coverage
+* Support recruiter shortlisting workflows
 
-Maintain candidate information and profiles
+### Interview Management
 
-Application Management
+* Track interview stages
+* Schedule and manage interview information
+* Record interview progress and outcomes
 
-Track candidate applications
+### Candidate Evaluation
 
-Resume Management
+* Display structured evaluation information
+* Show strengths and requirement gaps
+* Provide supporting evidence
+* Avoid unsupported candidate scoring
 
-Upload and manage candidate resumes
+### Authentication & Authorization
 
-Resume Intelligence
+* Secure authentication
+* Password hashing
+* Access-token based authentication
+* Role-based access control
+* Protected API routes
 
-Extract and analyze resume information
+### Audit & Analytics
 
-Job Matching
+* Track important system activities
+* Maintain audit records
+* Support recruitment-level analytics and reporting
 
-Compare candidate information with job requirements
+---
 
-Candidate Evaluation
+# Recruitment Lifecycle
 
-Present structured candidate evidence
-
+```text
+Requirement
+     ↓
+Job
+     ↓
+Candidate
+     ↓
+Application
+     ↓
+Resume
+     ↓
 Screening
+     ↓
+Shortlisting
+     ↓
+Interview
+     ↓
+Evaluation
+     ↓
+Hiring Decision
+     ↓
+Analytics
+```
 
-Support candidate screening and shortlisting
+The platform connects these stages instead of treating recruitment activities as separate systems.
 
-Interview Management
+---
 
-Track interview stages and outcomes
+# System Architecture
 
-Authentication
+The application follows a layered architecture that separates presentation, API communication, business logic, database operations, and persistence.
 
-Secure user authentication and access control
+```text
+Recruiters / Administrators / Candidates
+                    ↓
+        ┌───────────────────────┐
+        │   React + TypeScript  │
+        │      Frontend         │
+        └───────────┬───────────┘
+                    ↓
+             REST API Layer
+                    ↓
+        ┌───────────────────────┐
+        │        FastAPI        │
+        │ Routes + Auth + API   │
+        └───────────┬───────────┘
+                    ↓
+        ┌───────────────────────┐
+        │    Service Layer      │
+        │   Business Logic      │
+        └───────────┬───────────┘
+                    ↓
+        ┌───────────────────────┐
+        │   Repository Layer    │
+        │    Data Access        │
+        └───────────┬───────────┘
+                    ↓
+        ┌───────────────────────┐
+        │ SQLAlchemy + PostgreSQL│
+        └───────────────────────┘
 
-Audit & Analytics
+Supporting Systems:
+• Alembic migrations
+• Backend tests
+• Audit logging
+• Resume processing
+```
 
-Track system activity and recruitment information
+### Architectural Principles
 
-02 · System Architecture
+**Presentation Layer**
+Handles pages, navigation, reusable components, forms, and user interaction.
 
-The application follows a layered architecture so that the user interface, business logic, database access, and security responsibilities remain separated.
+**API Layer**
+Provides controlled communication between frontend and backend.
 
-flowchart TB
+**Business Layer**
+Handles recruitment workflows, authentication, candidate evaluation, applications, and other business rules.
 
-    U[Recruiters / Administrators / Candidates]
-
-    subgraph FRONTEND["Frontend Layer"]
-        UI[React + TypeScript]
-        ROUTER[Application Routing]
-        COMPONENTS[Reusable UI Components]
-        CONTEXT[Application State]
-        SERVICES[Frontend Services]
-    end
-
-    subgraph API["Application Layer"]
-        FASTAPI[FastAPI]
-        ROUTES[API Routes]
-        AUTH[Authentication & Authorization]
-        SERVICES_B[Business Services]
-    end
-
-    subgraph DATA["Data Layer"]
-        REPOSITORY[Repository Layer]
-        MODELS[SQLAlchemy Models]
-        DB[(PostgreSQL)]
-    end
-
-    subgraph SUPPORT["Supporting Systems"]
-        ALEMBIC[Alembic Migrations]
-        TESTS[Backend Tests]
-        AUDIT[Audit Logging]
-    end
-
-    U --> UI
-    UI --> ROUTER
-    ROUTER --> COMPONENTS
-    COMPONENTS --> CONTEXT
-    CONTEXT --> SERVICES
-
-    SERVICES --> FASTAPI
-    FASTAPI --> ROUTES
-    ROUTES --> AUTH
-    ROUTES --> SERVICES_B
-
-    SERVICES_B --> REPOSITORY
-    REPOSITORY --> MODELS
-    MODELS --> DB
-
-    ALEMBIC --> DB
-    TESTS --> FASTAPI
-    SERVICES_B --> AUDIT
-
-Architectural Principles
-
-Presentation
-Handles pages, navigation, components, forms, and user interaction.
-
-API
-Provides controlled communication between the frontend and backend.
-
-Business Logic
-Handles authentication, recruitment workflows, candidate evaluation, and application rules.
-
-Repository Layer
+**Repository Layer**
 Separates database operations from application logic.
 
-Database
-Stores users, requirements, jobs, candidates, applications, resumes, interviews, audit records, and related data.
+**Database Layer**
+Stores users, requirements, jobs, candidates, applications, resumes, interviews, and audit records.
 
-This separation makes the platform easier to maintain, test, extend, and scale.
+This separation improves maintainability, testing, extensibility, and scalability.
 
-03 · Recruitment Workflow
+---
 
-The complete recruitment workflow is designed around the relationship between a requirement and the candidate who eventually applies to the corresponding job.
+# AI & Resume Intelligence
 
-flowchart LR
+## Resume Analysis & Job-Specific Matching
 
-    R[Recruitment Requirement]
-    J[Job Opening]
-    C[Candidate]
-    A[Application]
-    RS[Resume]
-    S[Screening]
-    SH[Shortlist]
-    IV[Interview]
-    EV[Evaluation]
-    D[Hiring Decision]
+A core intelligence capability of the platform is **Resume Intelligence**.
 
-    R --> J
-    J --> C
-    C --> A
-    A --> RS
-    RS --> S
-    S --> SH
-    SH --> IV
-    IV --> EV
-    EV --> D
+The purpose is to analyze available resume information and compare it with the requirements of a specific job.
 
-Workflow Meaning
+```text
+Resume Upload
+      ↓
+Resume Processing
+      ↓
+Candidate Information
+      ↓
+Selected Job
+      ↓
+Requirement Matching
+      ↓
+Match Evaluation
+      ↓
+Explainable Insights
+```
 
-A recruitment requirement defines what the organization needs.
+### Analysis Areas
 
-A job opening is created from that requirement.
+| Evaluation Area      | Example Evidence                         |
+| -------------------- | ---------------------------------------- |
+| Skills               | Programming languages, frameworks, tools |
+| Experience           | Relevant roles and experience            |
+| Education            | Degree and academic background           |
+| Job Requirements     | Required and preferred qualifications    |
+| Technology Match     | Technologies mentioned in resume         |
+| Role Relevance       | Experience related to selected position  |
+| Requirement Coverage | Identifiable requirement coverage        |
+| Evidence             | Resume sections supporting evaluation    |
 
-Candidates discover and apply for the job.
+The analysis depends on the information available in the uploaded resume and the requirements defined for the selected job.
 
-Candidate resumes and application information are collected.
+---
 
-The candidate enters the screening process.
+# Candidate Match Evaluation
 
-Suitable candidates can be shortlisted.
+The platform can generate a **job-specific candidate match evaluation** after a resume has been successfully processed.
 
-Interviews are conducted.
+The evaluation is designed to consider multiple dimensions rather than relying only on keyword matching.
 
-Candidate information is evaluated.
+```text
+                 Processed Resume
+                       │
+        ┌──────────────┼──────────────┐
+        ↓              ↓              ↓
+   Skill Match   Experience Match  Education Match
+        │              │              │
+        └──────────────┼──────────────┘
+                       ↓
+              Requirement Match
+                       ↓
+              Match Evaluation
+                       ↓
+        ┌──────────────┼──────────────┐
+        ↓              ↓              ↓
+    Strengths         Gaps       Explanation
+```
 
-A hiring decision can be recorded.
+### Evaluation Dimensions
 
-Recruitment information can be used for analytics and reporting.
+* Skill Match
+* Experience Match
+* Education Match
+* Requirement Match
+* Overall Match Evaluation
+* Strengths
+* Requirement Gaps
+* Supporting Evidence
 
-04 · Resume Intelligence
+The exact weighting and scoring logic should be determined by the implemented evaluation model rather than presented as an unexplained fixed value.
 
-Resume Analysis & Job-Specific Candidate Matching
+---
 
-A major capability of the platform is Resume Intelligence.
+# Explainable Candidate Evaluation
 
-The purpose of Resume Intelligence is not to generate an arbitrary candidate score.
+A candidate score alone does not provide enough context for recruitment review.
 
-Instead, the system should analyze the available resume information and compare it with the requirements of a specific job.
+The platform therefore focuses on **evidence-based evaluation**.
 
-Resume Intelligence Pipeline
+A candidate evaluation interface can present information such as:
 
-flowchart LR
-
-    UPLOAD[Resume Upload]
-    EXTRACT[Resume Processing]
-    PROFILE[Candidate Profile]
-    JOB[Selected Job]
-    MATCH[Requirement Matching]
-    SCORE[Match Evaluation]
-    INSIGHT[Explainable Insights]
-
-    UPLOAD --> EXTRACT
-    EXTRACT --> PROFILE
-    PROFILE --> MATCH
-    JOB --> MATCH
-    MATCH --> SCORE
-    SCORE --> INSIGHT
-
-What the Resume Analysis Can Examine
-
-The analysis model is intended to work with information such as:
-
-Evaluation Area
-
-Example Evidence
-
-Skills
-
-Programming languages, frameworks, tools
-
-Experience
-
-Relevant years and previous roles
-
-Education
-
-Degree and academic background
-
-Job Requirements
-
-Required and preferred qualifications
-
-Technology Match
-
-Technologies mentioned in the resume
-
-Role Relevance
-
-Experience related to the selected position
-
-Requirement Coverage
-
-Percentage of identifiable requirements
-
-Evidence
-
-Resume sections supporting the evaluation
-
-The exact analysis should depend on the information available in the uploaded resume and the requirements defined for the selected job.
-
-05 · Candidate Match Score
-
-The platform can provide a job-specific candidate match score after a resume has been successfully processed.
-
-The score is intended to summarize multiple evaluation dimensions rather than relying on a single keyword match.
-
-Evaluation Model
-
-flowchart TB
-
-    RESUME[Processed Resume]
-
-    RESUME --> SKILLS[Skill Match]
-    RESUME --> EXPERIENCE[Experience Match]
-    RESUME --> EDUCATION[Education Match]
-    RESUME --> REQUIREMENTS[Requirement Match]
-
-    SKILLS --> SCORE[Overall Match Evaluation]
-    EXPERIENCE --> SCORE
-    EDUCATION --> SCORE
-    REQUIREMENTS --> SCORE
-
-    SCORE --> STRENGTHS[Strengths]
-    SCORE --> GAPS[Gaps]
-    SCORE --> REASONS[Explanation]
-
-Possible Evaluation Dimensions
-
-Skill Match
-
-Experience Match
-
-Education Match
-
-Requirement Match
-
+```text
 Overall Match
-
-The weighting and scoring logic should be defined by the implemented evaluation model rather than being presented as an unexplained fixed number.
-
-06 · Explainable Candidate Evaluation
-
-A score alone is not sufficient for a recruitment decision.
-
-The system should provide the evidence behind the evaluation.
-
-For example, a candidate evaluation interface may communicate:
-
-Overall Match: Example only
-Strong Matches: React, TypeScript, REST APIs
-Partial Matches: Testing, Cloud Deployment
-Missing / Unverified: Required experience level
-Strengths: Relevant frontend development experience
-Gaps: Some required technologies are not evidenced in the resume
-
-These values are illustrative examples only.
-
-They must not be displayed as actual candidate results unless the corresponding resume has been uploaded, processed, and evaluated against a selected job.
-
-Evidence-Based Evaluation Principle
-
-flowchart LR
-
-    A[Resume Available?]
-
-    A -->|No| B[No Resume Analysis]
-    B --> C[No Match Score]
-
-    A -->|Yes| D[Process Resume]
-    D --> E[Extract Evidence]
-    E --> F[Compare With Job]
-    F --> G[Generate Evaluation]
-    G --> H[Show Score + Evidence]
-
-Core Rule
-
-No Resume → No Resume Analysis → No Job Match Score
-
-This prevents unsupported candidate evaluation.
-
-07 · Candidate Evaluation Experience
-
-The candidate evaluation interface is intended to provide recruiters with a structured view rather than forcing them to interpret a single score.
-
-A future evaluation view can include:
-
-Section
-
-Information
-
-Match Score
-
-Overall job-specific match
-
+        ↓
 Skill Match
-
-Relevant and missing skills
-
+        ↓
 Experience Match
-
-Relevant experience against requirements
-
+        ↓
 Education Match
+        ↓
+Requirement Coverage
+        ↓
+Strengths + Gaps + Evidence
+```
 
-Education compatibility
+### Example Evaluation Information
 
-Requirement Match
+* Relevant skills
+* Missing or unverified skills
+* Relevant experience
+* Education compatibility
+* Requirement coverage
+* Supporting resume evidence
+* Structured recruiter review information
 
-Requirement coverage
+### Evidence-Based Rule
 
-Strengths
+```text
+No Resume
+    ↓
+No Resume Analysis
+    ↓
+No Job Match Score
+```
 
-Positive evidence from the candidate profile
+Candidate results must only be displayed after the relevant resume has been uploaded, processed, and evaluated against the selected job.
 
-Gaps
+The system is designed to **support recruiter decision-making rather than replace human judgment**.
 
-Missing, weak, or unverified requirements
+---
 
-Evidence
+# Core Application Modules
 
-Information supporting the evaluation
+| Module                 | Purpose                                             |
+| ---------------------- | --------------------------------------------------- |
+| Requirement Management | Define and manage recruitment requirements          |
+| Job Management         | Create and manage job openings                      |
+| Candidate Management   | Maintain candidate profiles                         |
+| Application Management | Track candidate applications                        |
+| Resume Management      | Upload and manage resumes                           |
+| Resume Intelligence    | Extract and analyze resume information              |
+| Candidate Matching     | Compare candidate information with job requirements |
+| Screening              | Support candidate screening                         |
+| Shortlisting           | Support recruitment shortlisting                    |
+| Interview Management   | Track interviews and outcomes                       |
+| Authentication         | Secure user authentication                          |
+| Authorization          | Role-based access control                           |
+| Audit                  | Track important system activities                   |
+| Analytics              | Provide recruitment-level reporting                 |
 
-Recommendation Context
+---
 
-Structured information for recruiter review
+# Data Model
 
-The system is intended to support recruiter decision-making, not replace human judgment.
+The major entities of the platform are organized around the recruitment lifecycle.
 
-08 · Core Application Modules
+```text
+USER
+ │
+ ├── APPLICATION
+ │       │
+ │       ├── JOB
+ │       │     └── REQUIREMENT
+ │       │
+ │       ├── CANDIDATE
+ │       │     └── RESUME
+ │       │
+ │       └── INTERVIEW
+ │
+ └── AUDIT_LOG
+```
 
-Requirement Management
+### Main Entities
 
-Provides a structured way to define and manage recruitment requirements.
+* User
+* Requirement
+* Job
+* Candidate
+* Application
+* Resume
+* Interview
+* Audit Log
 
-Requirements can act as the foundation for subsequent job creation and candidate evaluation.
+These entities establish the relationships required to connect requirements, jobs, candidates, applications, resumes, interviews, and recruitment activity.
 
-Job Management
+---
 
-Handles job openings, job information, required skills, qualifications, and recruitment status.
+# Frontend Architecture
 
-Candidate Management
+The frontend is developed using modern React and TypeScript practices.
 
-Maintains candidate profiles and recruitment-related information.
+### Responsibilities
 
-Application Management
+* Application routing
+* Page rendering
+* Reusable components
+* Forms and validation
+* Authentication state
+* Application state
+* API communication
+* Recruitment workflows
+* Candidate interfaces
+* Administrative interfaces
 
-Connects candidates with specific job openings and tracks application progress.
+### Frontend Flow
 
-Resume Management
-
-Provides the foundation for resume upload, storage, processing, and future resume intelligence capabilities.
-
-Screening & Shortlisting
-
-Supports the recruitment process after applications and resume information have been collected.
-
-Interview Management
-
-Tracks interview-related information and candidate progress.
-
-Authentication & Authorization
-
-Provides secure authentication and role-based access control.
-
-Audit & Analytics
-
-Supports activity tracking and recruitment-level reporting.
-
-09 · Data Model
-
-The platform is organized around the major entities involved in recruitment.
-
-erDiagram
-
-    USER ||--o{ APPLICATION : submits
-    USER ||--o{ AUDIT_LOG : creates
-    REQUIREMENT ||--o{ JOB : defines
-    JOB ||--o{ APPLICATION : receives
-    CANDIDATE ||--o{ APPLICATION : submits
-    CANDIDATE ||--o{ RESUME : owns
-    APPLICATION ||--o{ INTERVIEW : contains
-    APPLICATION ||--o| RESUME : uses
-
-    USER {
-        int id
-        string email
-        string role
-        string password_hash
-    }
-
-    REQUIREMENT {
-        int id
-        string title
-        string description
-        string status
-    }
-
-    JOB {
-        int id
-        string title
-        string description
-        string status
-    }
-
-    CANDIDATE {
-        int id
-        string name
-        string email
-        string profile
-    }
-
-    APPLICATION {
-        int id
-        int candidate_id
-        int job_id
-        string status
-    }
-
-    RESUME {
-        int id
-        int candidate_id
-        string file_path
-        string status
-    }
-
-    INTERVIEW {
-        int id
-        int application_id
-        datetime scheduled_at
-        string status
-    }
-
-    AUDIT_LOG {
-        int id
-        int user_id
-        string action
-        datetime created_at
-    }
-
-10 · Frontend Architecture
-
-The frontend is built using modern React and TypeScript practices.
-
-Main Responsibilities
-
-Application routing
-
-Page rendering
-
-Reusable components
-
-Forms and validation
-
-Application state
-
-Authentication state
-
-API communication
-
-Recruitment workflows
-
-Candidate interfaces
-
-Administrative interfaces
-
-Frontend Stack
-
+```text
 React
-   ↓
+  ↓
 TypeScript
-   ↓
+  ↓
 Vite
-   ↓
+  ↓
 React Router
-   ↓
+  ↓
 Reusable Components
-   ↓
+  ↓
 Application Services
-   ↓
+  ↓
 REST API
+```
 
-The frontend is designed to remain independent from backend implementation details.
+The frontend remains independent from backend implementation details through service-based API communication.
 
-11 · Backend Architecture
+---
 
-The backend is structured around modular API, service, repository, and data layers.
+# Backend Architecture
 
-flowchart TB
+The backend follows a modular API, service, repository, and database architecture.
 
-    API[API Routes]
-    AUTH[Authentication]
-    SERVICE[Service Layer]
-    REPO[Repository Layer]
-    MODEL[SQLAlchemy Models]
-    DB[(PostgreSQL)]
+```text
+API Routes
+    ↓
+Authentication / Authorization
+    ↓
+Service Layer
+    ↓
+Repository Layer
+    ↓
+SQLAlchemy Models
+    ↓
+PostgreSQL
+```
 
-    API --> AUTH
-    API --> SERVICE
-    SERVICE --> REPO
-    REPO --> MODEL
-    MODEL --> DB
+### Backend Responsibilities
 
-Backend Responsibilities
+* REST API
+* Authentication
+* Authorization
+* Requirement management
+* Job management
+* Candidate management
+* Application management
+* Resume management
+* Interview management
+* Candidate evaluation
+* Audit logging
+* Database access
+* Validation
+* Testing
 
-REST API
+---
 
-Authentication
+# Project Structure
 
-Authorization
-
-Recruitment business logic
-
-Candidate management
-
-Job management
-
-Resume management
-
-Application management
-
-Interview management
-
-Audit logging
-
-Database access
-
-Validation
-
-Testing
-
-12 · Project Structure
-
-The repository is organized into frontend, backend, configuration, and project documentation.
-
+```text
 Recruitment-System/
 │
 ├── backend/
@@ -675,363 +500,316 @@ Recruitment-System/
 ├── package.json
 ├── vite.config.ts
 └── tsconfig.json
-
-13 · Technology Stack
-
-Layer
-
-Technology
-
-Frontend
-
-React
-
-Language
-
-TypeScript
-
-Build Tool
-
-Vite
-
-Routing
-
-React Router
-
-UI
-
-Tailwind CSS / Reusable UI Components
-
-Backend
-
-FastAPI
-
-Backend Language
-
-Python
-
-Validation
-
-Pydantic
-
-ORM
-
-SQLAlchemy
-
-Database
-
-PostgreSQL
-
-Migrations
-
-Alembic
-
-Authentication
-
-bcrypt + access tokens
-
-API Style
-
-REST
-
-Testing
-
-Python backend tests
-
-14 · Development Roadmap
-
-Development is organized into incremental milestones.
-
-flowchart LR
-
-    M1["Milestone 1<br/>Architecture & Foundation"]
-    M2["Milestone 2<br/>Recruitment Workflow"]
-    M3["Milestone 3<br/>Candidate & Resume Intelligence"]
-    M4["Milestone 4<br/>Evaluation & Analytics"]
-    M5["Milestone 5<br/>Production Readiness"]
-
-    M1 --> M2 --> M3 --> M4 --> M5
-
-Milestone 1 — Architecture & Foundation
-
-Backend architecture
-
-Database schema
-
-Authentication
-
-Authorization
-
-API foundation
-
-Repository structure
-
-Migration setup
-
-Milestone 2 — Recruitment Workflow
-
-Requirements
-
-Jobs
-
-Candidates
-
-Applications
-
-Recruitment status tracking
-
-Core candidate workflows
-
-Milestone 3 — Candidate & Resume Intelligence
-
-Resume upload
-
-Resume processing
-
-Resume information extraction
-
-Candidate profile enrichment
-
-Job-specific matching
-
-Skill comparison
-
-Experience comparison
-
-Requirement comparison
-
-Explainable candidate evaluation
-
-Milestone 4 — Evaluation & Analytics
-
-Candidate evaluation views
-
-Screening support
-
-Shortlisting workflows
-
-Interview tracking
-
-Recruitment analytics
-
-Audit reporting
-
-Milestone 5 — Production Readiness
-
-Security hardening
-
-Performance improvements
-
-Test coverage
-
-Deployment preparation
-
-Monitoring
-
-Production configuration
-
-15 · Current Development Status
+```
+
+---
+
+# Technology Stack
+
+| Layer               | Technology                            |
+| ------------------- | ------------------------------------- |
+| Frontend            | React                                 |
+| Language            | TypeScript                            |
+| Build Tool          | Vite                                  |
+| Routing             | React Router                          |
+| UI                  | Tailwind CSS / Reusable UI Components |
+| Backend             | FastAPI                               |
+| Backend Language    | Python                                |
+| Validation          | Pydantic                              |
+| ORM                 | SQLAlchemy                            |
+| Database            | PostgreSQL                            |
+| Migrations          | Alembic                               |
+| Authentication      | Password Hashing + Access Tokens      |
+| API                 | REST                                  |
+| Testing             | Python Backend Tests                  |
+| Document Processing | Resume Processing & Matching          |
+
+---
+
+# Development Roadmap
+
+The platform is developed incrementally through defined milestones.
+
+```text
+Milestone 1
+Architecture & Foundation
+        ↓
+Milestone 2
+Recruitment Workflow
+        ↓
+Milestone 3
+Candidate & Resume Intelligence
+        ↓
+Milestone 4
+Evaluation & Analytics
+        ↓
+Milestone 5
+Production Readiness
+```
+
+### Milestone 1 — Architecture & Foundation
+
+* Backend architecture
+* Database schema
+* Authentication
+* Authorization
+* API foundation
+* Repository structure
+* Migration setup
+
+### Milestone 2 — Recruitment Workflow
+
+* Requirements
+* Jobs
+* Candidates
+* Applications
+* Recruitment status tracking
+* Core candidate workflows
+
+### Milestone 3 — Candidate & Resume Intelligence
+
+* Resume upload
+* Resume processing
+* Resume information extraction
+* Candidate profile enrichment
+* Job-specific matching
+* Skill comparison
+* Experience comparison
+* Requirement comparison
+* Explainable candidate evaluation
+
+### Milestone 4 — Evaluation & Analytics
+
+* Candidate evaluation views
+* Screening support
+* Shortlisting workflows
+* Interview tracking
+* Recruitment analytics
+* Audit reporting
+
+### Milestone 5 — Production Readiness
+
+* Security hardening
+* Performance improvements
+* Test coverage
+* Deployment preparation
+* Monitoring
+* Production configuration
+
+---
+
+# Current Development Status
 
 The repository is being developed incrementally from an existing frontend prototype toward a complete recruitment management platform.
 
-Current Foundation
+### Current Foundation
 
-React + Vite + TypeScript frontend
+* React + Vite + TypeScript frontend
+* FastAPI backend structure
+* PostgreSQL-oriented database architecture
+* SQLAlchemy models
+* Alembic migrations
+* Authentication foundation
+* Role-based authorization
+* Repository architecture
+* Backend test structure
+* Recruitment domain models
+* Resume upload foundation
 
-FastAPI backend structure
+### Resume Intelligence Status
 
-PostgreSQL-oriented database architecture
+Resume Intelligence is being implemented progressively.
 
-SQLAlchemy models
+The system is designed so that candidate analysis is only displayed when the relevant resume has been uploaded, processed, and evaluated against a selected job.
 
-Alembic migrations
+No fabricated candidate scores or analysis results should be presented.
 
-Authentication foundation
+---
 
-Role-based authorization
+# Security & Environment
 
-Repository architecture
+Environment-specific secrets must not be committed to the repository.
 
-Backend test structure
+Local configuration should be maintained using environment files:
 
-Recruitment domain models
-
-Resume upload foundation
-
-Resume Intelligence Status
-
-Resume Intelligence is documented as a planned and progressively implemented capability.
-
-The system should not display fabricated candidate scores or analysis results.
-
-Actual resume analysis should only be displayed after the corresponding resume has been uploaded, processed, and evaluated against a selected job.
-
-16 · Security & Environment
-
-Environment-specific secrets must never be committed to the repository.
-
-Use environment files for local configuration:
-
+```text
 .env
 .env.local
+```
 
-Example configuration templates are provided through:
+Example configuration templates:
 
+```text
 .env.example
 backend/.env.example
+```
 
-Sensitive values such as:
+Sensitive values include:
 
-Database credentials
+* Database credentials
+* Secret keys
+* Authentication secrets
+* External service credentials
 
-Secret keys
+These values should remain outside version control.
 
-Authentication secrets
+---
 
-External service credentials
+# Local Development
 
-must remain outside version control.
+## Frontend
 
-17 · Local Development
-
-Frontend
-
+```bash
 npm install
 npm run dev
+```
 
-Build verification:
+### Build Verification
 
+```bash
 npm run build
+```
 
-TypeScript verification:
+### TypeScript Verification
 
+```bash
 npx tsc --noEmit
+```
 
-Backend
+---
 
+## Backend
+
+```bash
 cd backend
 python -m venv .venv
+```
 
-Activate the environment:
+### Windows PowerShell
 
-Windows PowerShell
-
+```powershell
 .\.venv\Scripts\Activate.ps1
+```
 
-Install dependencies:
+### Install Dependencies
 
+```bash
 pip install -r requirements.txt
+```
 
-Create the environment file:
+### Create Environment File
 
+```powershell
 Copy-Item .env.example .env
+```
 
-Run database migrations:
+### Run Database Migrations
 
+```bash
 alembic upgrade head
+```
 
-Start the API:
+### Start FastAPI
 
+```bash
 uvicorn app.main:app --reload
+```
 
-18 · Documentation
+API documentation will be available through FastAPI's Swagger interface when the server is running.
 
-The repository includes supporting documentation for development and project planning.
+---
 
-Document
+# Documentation
 
-Purpose
+The repository includes supporting project documentation.
 
-README.md
+| Document               | Purpose                                            |
+| ---------------------- | -------------------------------------------------- |
+| README.md              | Project overview and development guide             |
+| CURRENT_BASELINE.md    | Existing system assessment and baseline            |
+| IMPLEMENTATION_PLAN.md | Development milestones and implementation strategy |
+| TODO.md                | Pending implementation tasks                       |
+| ATTRIBUTIONS.md        | Third-party resources and attribution              |
+| backend/README.md      | Backend setup and development information          |
 
-Project overview and development guide
+---
 
-CURRENT_BASELINE.md
+# Development Principles
 
-Existing system assessment and baseline
-
-IMPLEMENTATION_PLAN.md
-
-Development milestones and implementation strategy
-
-TODO.md
-
-Pending implementation tasks
-
-ATTRIBUTIONS.md
-
-Third-party resources and attribution
-
-backend/README.md
-
-Backend-specific setup and development information
-
-19 · Development Principles
-
-The project follows a set of core engineering principles.
-
-Modular Architecture
+### Modular Architecture
 
 Frontend, API, services, repositories, authentication, and persistence remain separated.
 
-Secure by Design
+### Secure by Design
 
 Authentication, authorization, password hashing, environment configuration, and server-side controls are treated as core requirements.
 
-Evidence-Based Evaluation
+### Evidence-Based Evaluation
 
 Candidate evaluation should be based on available candidate and job information rather than unsupported assumptions.
 
-Explainability
+### Explainability
 
-A candidate match should provide understandable supporting information instead of exposing only an unexplained number.
+Candidate matching should provide understandable supporting information instead of exposing only an unexplained number.
 
-Incremental Development
+### Incremental Development
 
-New functionality is introduced through defined milestones rather than attempting to implement the entire platform at once.
+New functionality is introduced through defined milestones instead of attempting to implement the complete platform at once.
 
-Maintainable Code
+### Maintainable Code
 
 The codebase is organized into reusable components and focused modules to support long-term development.
 
-20 · Future Scope
+---
 
-Future versions of the platform can extend the recruitment workflow with:
+# Future Scope
 
-Advanced resume parsing
+Future versions can extend the platform with:
 
-Semantic skill matching
-
-Improved job-specific candidate ranking
-
-Explainable recommendation systems
-
-Automated screening assistance
-
-Advanced recruitment analytics
-
-Candidate communication workflows
-
-Interview scheduling
-
-Notification systems
-
-Recruiter dashboards
-
-Candidate-job compatibility analysis
-
-Production deployment
-
-Monitoring and observability
+* Advanced resume parsing
+* Semantic skill matching
+* Improved job-specific candidate ranking
+* Explainable recommendation systems
+* Automated screening assistance
+* Advanced recruitment analytics
+* Candidate communication workflows
+* Interview scheduling
+* Notification systems
+* Recruiter dashboards
+* Candidate-job compatibility analysis
+* Production deployment
+* Monitoring and observability
 
 These capabilities can be introduced progressively without changing the fundamental architecture.
 
-21 · Project Objective
+---
 
-The long-term objective of the project is to build a structured and intelligent recruitment platform that connects:
+# Project Objective
 
-Requirements → Jobs → Candidates → Applications → Resumes → Screening → Interviews → Evaluation → Decisions → Analytics
+The long-term objective is to build a structured and intelligent recruitment platform that connects:
 
-The platform is designed to combine traditional recruitment management with structured candidate-job analysis while maintaining transparency, modularity, and evidence-based evaluation.
+```text
+Requirements
+      ↓
+Jobs
+      ↓
+Candidates
+      ↓
+Applications
+      ↓
+Resumes
+      ↓
+Screening
+      ↓
+Interviews
+      ↓
+Evaluation
+      ↓
+Hiring Decisions
+      ↓
+Analytics
+```
 
-The final system should provide recruiters with a centralized environment where recruitment information is connected, candidate evaluation is explainable, and every major stage of the hiring workflow can be managed within a single platform.
+The platform combines traditional recruitment management with structured candidate-job analysis while maintaining **transparency, modularity, explainability, and evidence-based evaluation**.
+
+The final system provides recruiters with a centralized environment where recruitment information is connected and major stages of the hiring workflow can be managed within a single platform.
