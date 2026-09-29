@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&family=Sora:wght@400;500;600;700;800&family=Syne:wght@400;500;600;700;800&display=swap');
+
+* {
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Syne', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.font-sora {
+  font-family: 'Sora', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.font-inter {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}

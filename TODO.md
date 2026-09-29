@@ -1,0 +1,7 @@
+- [x] Simplify outer layout (plain bg)
+- [x] Stats to simple list
+- [x] Profile to table
+- [x] Notifications to list
+- [x] Resume analysis to simple divs/lists
+- [x] Recommended jobs to table
+- [x] Recent applications to table

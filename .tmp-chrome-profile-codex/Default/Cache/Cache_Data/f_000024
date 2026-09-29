@@ -1,0 +1,333 @@
+import { createHotContext as __vite__createHotContext } from "/@vite/client";import.meta.hot = __vite__createHotContext("/@fs/A:\\Requirement System\\src\\app\\components\\candidate\\ApplicationSkillPicker.tsx");import __vite__cjsImport0_react_jsxDevRuntime from "/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=ff120309"; const jsxDEV = __vite__cjsImport0_react_jsxDevRuntime["jsxDEV"];
+import * as RefreshRuntime from "/@react-refresh";
+const inWebWorker = typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope;
+let prevRefreshReg;
+let prevRefreshSig;
+if (import.meta.hot && !inWebWorker) {
+  if (!window.$RefreshReg$) {
+    throw new Error(
+      "@vitejs/plugin-react can't detect preamble. Something is wrong."
+    );
+  }
+  prevRefreshReg = window.$RefreshReg$;
+  prevRefreshSig = window.$RefreshSig$;
+  window.$RefreshReg$ = RefreshRuntime.getRefreshReg("A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx");
+  window.$RefreshSig$ = RefreshRuntime.createSignatureFunctionForTransform;
+}
+import { Search, X } from "/node_modules/.vite/deps/lucide-react.js?v=ff120309";
+import {
+  experienceLevelOptions
+} from "/src/app/utils/candidate.ts";
+export default function ApplicationSkillPicker({
+  selectedSkills,
+  skillQuery,
+  suggestions,
+  suggestedSkills,
+  canAddCustomSkill,
+  showSuggestions,
+  skillsError,
+  experienceError,
+  selectedExperienceLevel,
+  onSkillQueryChange,
+  onSkillFocus,
+  onSkillBlur,
+  onSkillKeyDown,
+  onAddSkill,
+  onRemoveSkill,
+  onExperienceChange
+}) {
+  const trimmedSkillQuery = skillQuery.trim();
+  return /* @__PURE__ */ jsxDEV("section", { className: "rounded-3xl border border-white/10 bg-white/[0.03] p-5", children: [
+    /* @__PURE__ */ jsxDEV("div", { className: "mb-5 flex items-center gap-3", children: [
+      /* @__PURE__ */ jsxDEV("div", { className: "rounded-2xl bg-cyan-400/10 p-3 text-cyan-200", children: /* @__PURE__ */ jsxDEV(Search, { className: "h-5 w-5" }, void 0, false, {
+        fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+        lineNumber: 70,
+        columnNumber: 11
+      }, this) }, void 0, false, {
+        fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+        lineNumber: 69,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ jsxDEV("div", { children: [
+        /* @__PURE__ */ jsxDEV("h3", { className: "text-xl font-semibold text-white", children: "Skills and Experience" }, void 0, false, {
+          fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+          lineNumber: 73,
+          columnNumber: 11
+        }, this),
+        /* @__PURE__ */ jsxDEV("p", { className: "text-sm text-slate-400", children: "Add the strongest match signals for this requirement." }, void 0, false, {
+          fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+          lineNumber: 74,
+          columnNumber: 11
+        }, this)
+      ] }, void 0, true, {
+        fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+        lineNumber: 72,
+        columnNumber: 9
+      }, this)
+    ] }, void 0, true, {
+      fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+      lineNumber: 68,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("div", { className: "space-y-5", children: [
+      /* @__PURE__ */ jsxDEV("div", { children: [
+        /* @__PURE__ */ jsxDEV("div", { className: "mb-2 flex items-center justify-between gap-3", children: [
+          /* @__PURE__ */ jsxDEV("span", { className: "text-sm font-medium text-slate-100", children: "Skills *" }, void 0, false, {
+            fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+            lineNumber: 83,
+            columnNumber: 13
+          }, this),
+          /* @__PURE__ */ jsxDEV("span", { className: "text-xs text-slate-500", children: [
+            "Suggested: ",
+            suggestedSkills.join(", ") || "React, Python"
+          ] }, void 0, true, {
+            fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+            lineNumber: 84,
+            columnNumber: 13
+          }, this)
+        ] }, void 0, true, {
+          fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+          lineNumber: 82,
+          columnNumber: 11
+        }, this),
+        /* @__PURE__ */ jsxDEV("div", { className: "rounded-3xl border border-white/10 bg-white/[0.04] p-3", children: /* @__PURE__ */ jsxDEV("div", { className: "flex flex-wrap gap-2", children: [
+          selectedSkills.map(
+            (skill) => /* @__PURE__ */ jsxDEV(
+              "span",
+              {
+                className: "inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-2 text-sm font-medium text-cyan-50",
+                children: [
+                  skill,
+                  /* @__PURE__ */ jsxDEV(
+                    "button",
+                    {
+                      type: "button",
+                      onClick: () => onRemoveSkill(skill),
+                      className: "rounded-full text-cyan-100 transition-colors hover:text-white",
+                      children: /* @__PURE__ */ jsxDEV(X, { className: "h-3.5 w-3.5" }, void 0, false, {
+                        fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+                        lineNumber: 102,
+                        columnNumber: 21
+                      }, this)
+                    },
+                    void 0,
+                    false,
+                    {
+                      fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+                      lineNumber: 97,
+                      columnNumber: 19
+                    },
+                    this
+                  )
+                ]
+              },
+              skill,
+              true,
+              {
+                fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+                lineNumber: 92,
+                columnNumber: 15
+              },
+              this
+            )
+          ),
+          /* @__PURE__ */ jsxDEV("div", { className: "relative min-w-[220px] flex-1", children: [
+            /* @__PURE__ */ jsxDEV(
+              "input",
+              {
+                value: skillQuery,
+                onChange: (event) => onSkillQueryChange(event.target.value),
+                onFocus: onSkillFocus,
+                onBlur: onSkillBlur,
+                onKeyDown: onSkillKeyDown,
+                placeholder: "Type a skill and press Enter",
+                className: "w-full border-0 bg-transparent px-2 py-2 text-white outline-none placeholder:text-slate-500"
+              },
+              void 0,
+              false,
+              {
+                fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+                lineNumber: 108,
+                columnNumber: 17
+              },
+              this
+            ),
+            showSuggestions && /* @__PURE__ */ jsxDEV("div", { className: "absolute left-0 top-[calc(100%+0.5rem)] z-20 w-full rounded-2xl border border-white/10 bg-[#0c1724] p-2 shadow-2xl", children: [
+              suggestions.map(
+                (skill) => /* @__PURE__ */ jsxDEV(
+                  "button",
+                  {
+                    type: "button",
+                    onMouseDown: (event) => {
+                      event.preventDefault();
+                      onAddSkill(skill);
+                    },
+                    className: "flex w-full items-center justify-between rounded-xl px-3 py-2 text-left text-sm text-slate-200 transition-colors hover:bg-white/[0.06]",
+                    children: [
+                      /* @__PURE__ */ jsxDEV("span", { children: skill }, void 0, false, {
+                        fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+                        lineNumber: 130,
+                        columnNumber: 25
+                      }, this),
+                      /* @__PURE__ */ jsxDEV("span", { className: "text-xs text-slate-500", children: "Suggested" }, void 0, false, {
+                        fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+                        lineNumber: 131,
+                        columnNumber: 25
+                      }, this)
+                    ]
+                  },
+                  skill,
+                  true,
+                  {
+                    fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+                    lineNumber: 121,
+                    columnNumber: 19
+                  },
+                  this
+                )
+              ),
+              canAddCustomSkill && /* @__PURE__ */ jsxDEV(
+                "button",
+                {
+                  type: "button",
+                  onMouseDown: (event) => {
+                    event.preventDefault();
+                    onAddSkill(trimmedSkillQuery);
+                  },
+                  className: "flex w-full items-center justify-between rounded-xl px-3 py-2 text-left text-sm text-slate-200 transition-colors hover:bg-white/[0.06]",
+                  children: [
+                    /* @__PURE__ */ jsxDEV("span", { children: [
+                      'Add "',
+                      trimmedSkillQuery,
+                      '"'
+                    ] }, void 0, true, {
+                      fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+                      lineNumber: 144,
+                      columnNumber: 25
+                    }, this),
+                    /* @__PURE__ */ jsxDEV("span", { className: "text-xs text-cyan-300", children: "Custom" }, void 0, false, {
+                      fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+                      lineNumber: 145,
+                      columnNumber: 25
+                    }, this)
+                  ]
+                },
+                void 0,
+                true,
+                {
+                  fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+                  lineNumber: 136,
+                  columnNumber: 19
+                },
+                this
+              )
+            ] }, void 0, true, {
+              fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+              lineNumber: 119,
+              columnNumber: 17
+            }, this)
+          ] }, void 0, true, {
+            fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+            lineNumber: 107,
+            columnNumber: 15
+          }, this)
+        ] }, void 0, true, {
+          fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+          lineNumber: 90,
+          columnNumber: 13
+        }, this) }, void 0, false, {
+          fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+          lineNumber: 89,
+          columnNumber: 11
+        }, this),
+        skillsError && /* @__PURE__ */ jsxDEV("p", { className: "mt-2 text-sm text-rose-300", children: skillsError }, void 0, false, {
+          fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+          lineNumber: 154,
+          columnNumber: 27
+        }, this)
+      ] }, void 0, true, {
+        fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+        lineNumber: 81,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ jsxDEV("div", { children: [
+        /* @__PURE__ */ jsxDEV("span", { className: "mb-3 block text-sm font-medium text-slate-100", children: "Experience Level *" }, void 0, false, {
+          fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+          lineNumber: 158,
+          columnNumber: 11
+        }, this),
+        /* @__PURE__ */ jsxDEV("div", { className: "grid gap-3 md:grid-cols-3", children: experienceLevelOptions.map((option) => {
+          const active = selectedExperienceLevel === option.value;
+          return /* @__PURE__ */ jsxDEV(
+            "button",
+            {
+              type: "button",
+              onClick: () => onExperienceChange(option.value),
+              className: `rounded-3xl border px-4 py-4 text-left transition-all ${active ? "border-cyan-400/40 bg-cyan-400/12 shadow-[0_10px_30px_rgba(6,182,212,0.15)]" : "border-white/10 bg-white/[0.03] hover:border-cyan-400/25 hover:bg-white/[0.05]"}`,
+              children: [
+                /* @__PURE__ */ jsxDEV("p", { className: "text-base font-semibold text-white", children: option.label }, void 0, false, {
+                  fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+                  lineNumber: 176,
+                  columnNumber: 19
+                }, this),
+                /* @__PURE__ */ jsxDEV("p", { className: "mt-2 text-sm text-slate-400", children: option.description }, void 0, false, {
+                  fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+                  lineNumber: 177,
+                  columnNumber: 19
+                }, this)
+              ]
+            },
+            option.value,
+            true,
+            {
+              fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+              lineNumber: 166,
+              columnNumber: 17
+            },
+            this
+          );
+        }) }, void 0, false, {
+          fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+          lineNumber: 161,
+          columnNumber: 11
+        }, this),
+        experienceError && /* @__PURE__ */ jsxDEV("p", { className: "mt-2 text-sm text-rose-300", children: experienceError }, void 0, false, {
+          fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+          lineNumber: 184,
+          columnNumber: 11
+        }, this)
+      ] }, void 0, true, {
+        fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+        lineNumber: 157,
+        columnNumber: 9
+      }, this)
+    ] }, void 0, true, {
+      fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+      lineNumber: 80,
+      columnNumber: 7
+    }, this)
+  ] }, void 0, true, {
+    fileName: "A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx",
+    lineNumber: 67,
+    columnNumber: 5
+  }, this);
+}
+_c = ApplicationSkillPicker;
+var _c;
+$RefreshReg$(_c, "ApplicationSkillPicker");
+if (import.meta.hot && !inWebWorker) {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+if (import.meta.hot && !inWebWorker) {
+  RefreshRuntime.__hmr_import(import.meta.url).then((currentExports) => {
+    RefreshRuntime.registerExportsForReactRefresh("A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx", currentExports);
+    import.meta.hot.accept((nextExports) => {
+      if (!nextExports) return;
+      const invalidateMessage = RefreshRuntime.validateRefreshBoundaryAndEnqueueUpdate("A:/Requirement System/src/app/components/candidate/ApplicationSkillPicker.tsx", currentExports, nextExports);
+      if (invalidateMessage) import.meta.hot.invalidate(invalidateMessage);
+    });
+  });
+}
+
+//# sourceMappingURL=data:application/json;base64,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QSIsIm5hbWVzIjpbIlNlYXJjaCIsIlgiLCJleHBlcmllbmNlTGV2ZWxPcHRpb25zIiwiQXBwbGljYXRpb25Ta2lsbFBpY2tlciIsInNlbGVjdGVkU2tpbGxzIiwic2tpbGxRdWVyeSIsInN1Z2dlc3Rpb25zIiwic3VnZ2VzdGVkU2tpbGxzIiwiY2FuQWRkQ3VzdG9tU2tpbGwiLCJzaG93U3VnZ2VzdGlvbnMiLCJza2lsbHNFcnJvciIsImV4cGVyaWVuY2VFcnJvciIsInNlbGVjdGVkRXhwZXJpZW5jZUxldmVsIiwib25Ta2lsbFF1ZXJ5Q2hhbmdlIiwib25Ta2lsbEZvY3VzIiwib25Ta2lsbEJsdXIiLCJvblNraWxsS2V5RG93biIsIm9uQWRkU2tpbGwiLCJvblJlbW92ZVNraWxsIiwib25FeHBlcmllbmNlQ2hhbmdlIiwidHJpbW1lZFNraWxsUXVlcnkiLCJ0cmltIiwiam9pbiIsIm1hcCIsInNraWxsIiwiZXZlbnQiLCJ0YXJnZXQiLCJ2YWx1ZSIsInByZXZlbnREZWZhdWx0Iiwib3B0aW9uIiwiYWN0aXZlIiwibGFiZWwiLCJkZXNjcmlwdGlvbiIsIl9jIl0sImlnbm9yZUxpc3QiOltdLCJzb3VyY2VzIjpbIkFwcGxpY2F0aW9uU2tpbGxQaWNrZXIudHN4Il0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB0eXBlIHsgS2V5Ym9hcmRFdmVudCBhcyBSZWFjdEtleWJvYXJkRXZlbnQgfSBmcm9tICdyZWFjdCdcbmltcG9ydCB7IFNlYXJjaCwgWCB9IGZyb20gJ2x1Y2lkZS1yZWFjdCdcbmltcG9ydCB7XG4gIGV4cGVyaWVuY2VMZXZlbE9wdGlvbnMsXG4gIHR5cGUgRXhwZXJpZW5jZUxldmVsLFxufSBmcm9tICcuLi8uLi91dGlscy9jYW5kaWRhdGUnXG5cbmludGVyZmFjZSBBcHBsaWNhdGlvblNraWxsUGlja2VyUHJvcHMge1xuICBzZWxlY3RlZFNraWxsczogc3RyaW5nW11cbiAgc2tpbGxRdWVyeTogc3RyaW5nXG4gIHN1Z2dlc3Rpb25zOiBzdHJpbmdbXVxuICBzdWdnZXN0ZWRTa2lsbHM6IHN0cmluZ1tdXG4gIGNhbkFkZEN1c3RvbVNraWxsOiBib29sZWFuXG4gIHNob3dTdWdnZXN0aW9uczogYm9vbGVhblxuICBza2lsbHNFcnJvcj86IHN0cmluZ1xuICBleHBlcmllbmNlRXJyb3I/OiBzdHJpbmdcbiAgc2VsZWN0ZWRFeHBlcmllbmNlTGV2ZWw6IEV4cGVyaWVuY2VMZXZlbFxuICBvblNraWxsUXVlcnlDaGFuZ2U6ICh2YWx1ZTogc3RyaW5nKSA9PiB2b2lkXG4gIG9uU2tpbGxGb2N1czogKCkgPT4gdm9pZFxuICBvblNraWxsQmx1cjogKCkgPT4gdm9pZFxuICBvblNraWxsS2V5RG93bjogKGV2ZW50OiBSZWFjdEtleWJvYXJkRXZlbnQ8SFRNTElucHV0RWxlbWVudD4pID0+IHZvaWRcbiAgb25BZGRTa2lsbDogKHNraWxsOiBzdHJpbmcpID0+IHZvaWRcbiAgb25SZW1vdmVTa2lsbDogKHNraWxsOiBzdHJpbmcpID0+IHZvaWRcbiAgb25FeHBlcmllbmNlQ2hhbmdlOiAodmFsdWU6IEV4cGVyaWVuY2VMZXZlbCkgPT4gdm9pZFxufVxuXG5leHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBBcHBsaWNhdGlvblNraWxsUGlja2VyKHtcbiAgc2VsZWN0ZWRTa2lsbHMsXG4gIHNraWxsUXVlcnksXG4gIHN1Z2dlc3Rpb25zLFxuICBzdWdnZXN0ZWRTa2lsbHMsXG4gIGNhbkFkZEN1c3RvbVNraWxsLFxuICBzaG93U3VnZ2VzdGlvbnMsXG4gIHNraWxsc0Vycm9yLFxuICBleHBlcmllbmNlRXJyb3IsXG4gIHNlbGVjdGVkRXhwZXJpZW5jZUxldmVsLFxuICBvblNraWxsUXVlcnlDaGFuZ2UsXG4gIG9uU2tpbGxGb2N1cyxcbiAgb25Ta2lsbEJsdXIsXG4gIG9uU2tpbGxLZXlEb3duLFxuICBvbkFkZFNraWxsLFxuICBvblJlbW92ZVNraWxsLFxuICBvbkV4cGVyaWVuY2VDaGFuZ2UsXG59OiBBcHBsaWNhdGlvblNraWxsUGlja2VyUHJvcHMpIHtcbiAgY29uc3QgdHJpbW1lZFNraWxsUXVlcnkgPSBza2lsbFF1ZXJ5LnRyaW0oKVxuXG4gIHJldHVybiAoXG4gICAgPHNlY3Rpb24gY2xhc3NOYW1lPVwicm91bmRlZC0zeGwgYm9yZGVyIGJvcmRlci13aGl0ZS8xMCBiZy13aGl0ZS9bMC4wM10gcC01XCI+XG4gICAgICA8ZGl2IGNsYXNzTmFtZT1cIm1iLTUgZmxleCBpdGVtcy1jZW50ZXIgZ2FwLTNcIj5cbiAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJyb3VuZGVkLTJ4bCBiZy1jeWFuLTQwMC8xMCBwLTMgdGV4dC1jeWFuLTIwMFwiPlxuICAgICAgICAgIDxTZWFyY2ggY2xhc3NOYW1lPVwiaC01IHctNVwiIC8+XG4gICAgICAgIDwvZGl2PlxuICAgICAgICA8ZGl2PlxuICAgICAgICAgIDxoMyBjbGFzc05hbWU9XCJ0ZXh0LXhsIGZvbnQtc2VtaWJvbGQgdGV4dC13aGl0ZVwiPlNraWxscyBhbmQgRXhwZXJpZW5jZTwvaDM+XG4gICAgICAgICAgPHAgY2xhc3NOYW1lPVwidGV4dC1zbSB0ZXh0LXNsYXRlLTQwMFwiPlxuICAgICAgICAgICAgQWRkIHRoZSBzdHJvbmdlc3QgbWF0Y2ggc2lnbmFscyBmb3IgdGhpcyByZXF1aXJlbWVudC5cbiAgICAgICAgICA8L3A+XG4gICAgICAgIDwvZGl2PlxuICAgICAgPC9kaXY+XG5cbiAgICAgIDxkaXYgY2xhc3NOYW1lPVwic3BhY2UteS01XCI+XG4gICAgICAgIDxkaXY+XG4gICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJtYi0yIGZsZXggaXRlbXMtY2VudGVyIGp1c3RpZnktYmV0d2VlbiBnYXAtM1wiPlxuICAgICAgICAgICAgPHNwYW4gY2xhc3NOYW1lPVwidGV4dC1zbSBmb250LW1lZGl1bSB0ZXh0LXNsYXRlLTEwMFwiPlNraWxscyAqPC9zcGFuPlxuICAgICAgICAgICAgPHNwYW4gY2xhc3NOYW1lPVwidGV4dC14cyB0ZXh0LXNsYXRlLTUwMFwiPlxuICAgICAgICAgICAgICBTdWdnZXN0ZWQ6IHtzdWdnZXN0ZWRTa2lsbHMuam9pbignLCAnKSB8fCAnUmVhY3QsIFB5dGhvbid9XG4gICAgICAgICAgICA8L3NwYW4+XG4gICAgICAgICAgPC9kaXY+XG5cbiAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cInJvdW5kZWQtM3hsIGJvcmRlciBib3JkZXItd2hpdGUvMTAgYmctd2hpdGUvWzAuMDRdIHAtM1wiPlxuICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJmbGV4IGZsZXgtd3JhcCBnYXAtMlwiPlxuICAgICAgICAgICAgICB7c2VsZWN0ZWRTa2lsbHMubWFwKHNraWxsID0+IChcbiAgICAgICAgICAgICAgICA8c3BhblxuICAgICAgICAgICAgICAgICAga2V5PXtza2lsbH1cbiAgICAgICAgICAgICAgICAgIGNsYXNzTmFtZT1cImlubGluZS1mbGV4IGl0ZW1zLWNlbnRlciBnYXAtMiByb3VuZGVkLWZ1bGwgYm9yZGVyIGJvcmRlci1jeWFuLTQwMC8yMCBiZy1jeWFuLTQwMC8xMCBweC0zIHB5LTIgdGV4dC1zbSBmb250LW1lZGl1bSB0ZXh0LWN5YW4tNTBcIlxuICAgICAgICAgICAgICAgID5cbiAgICAgICAgICAgICAgICAgIHtza2lsbH1cbiAgICAgICAgICAgICAgICAgIDxidXR0b25cbiAgICAgICAgICAgICAgICAgICAgdHlwZT1cImJ1dHRvblwiXG4gICAgICAgICAgICAgICAgICAgIG9uQ2xpY2s9eygpID0+IG9uUmVtb3ZlU2tpbGwoc2tpbGwpfVxuICAgICAgICAgICAgICAgICAgICBjbGFzc05hbWU9XCJyb3VuZGVkLWZ1bGwgdGV4dC1jeWFuLTEwMCB0cmFuc2l0aW9uLWNvbG9ycyBob3Zlcjp0ZXh0LXdoaXRlXCJcbiAgICAgICAgICAgICAgICAgID5cbiAgICAgICAgICAgICAgICAgICAgPFggY2xhc3NOYW1lPVwiaC0zLjUgdy0zLjVcIiAvPlxuICAgICAgICAgICAgICAgICAgPC9idXR0b24+XG4gICAgICAgICAgICAgICAgPC9zcGFuPlxuICAgICAgICAgICAgICApKX1cblxuICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cInJlbGF0aXZlIG1pbi13LVsyMjBweF0gZmxleC0xXCI+XG4gICAgICAgICAgICAgICAgPGlucHV0XG4gICAgICAgICAgICAgICAgICB2YWx1ZT17c2tpbGxRdWVyeX1cbiAgICAgICAgICAgICAgICAgIG9uQ2hhbmdlPXtldmVudCA9PiBvblNraWxsUXVlcnlDaGFuZ2UoZXZlbnQudGFyZ2V0LnZhbHVlKX1cbiAgICAgICAgICAgICAgICAgIG9uRm9jdXM9e29uU2tpbGxGb2N1c31cbiAgICAgICAgICAgICAgICAgIG9uQmx1cj17b25Ta2lsbEJsdXJ9XG4gICAgICAgICAgICAgICAgICBvbktleURvd249e29uU2tpbGxLZXlEb3dufVxuICAgICAgICAgICAgICAgICAgcGxhY2Vob2xkZXI9XCJUeXBlIGEgc2tpbGwgYW5kIHByZXNzIEVudGVyXCJcbiAgICAgICAgICAgICAgICAgIGNsYXNzTmFtZT1cInctZnVsbCBib3JkZXItMCBiZy10cmFuc3BhcmVudCBweC0yIHB5LTIgdGV4dC13aGl0ZSBvdXRsaW5lLW5vbmUgcGxhY2Vob2xkZXI6dGV4dC1zbGF0ZS01MDBcIlxuICAgICAgICAgICAgICAgIC8+XG5cbiAgICAgICAgICAgICAgICB7c2hvd1N1Z2dlc3Rpb25zICYmIChcbiAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiYWJzb2x1dGUgbGVmdC0wIHRvcC1bY2FsYygxMDAlKzAuNXJlbSldIHotMjAgdy1mdWxsIHJvdW5kZWQtMnhsIGJvcmRlciBib3JkZXItd2hpdGUvMTAgYmctWyMwYzE3MjRdIHAtMiBzaGFkb3ctMnhsXCI+XG4gICAgICAgICAgICAgICAgICAgIHtzdWdnZXN0aW9ucy5tYXAoc2tpbGwgPT4gKFxuICAgICAgICAgICAgICAgICAgICAgIDxidXR0b25cbiAgICAgICAgICAgICAgICAgICAgICAgIGtleT17c2tpbGx9XG4gICAgICAgICAgICAgICAgICAgICAgICB0eXBlPVwiYnV0dG9uXCJcbiAgICAgICAgICAgICAgICAgICAgICAgIG9uTW91c2VEb3duPXtldmVudCA9PiB7XG4gICAgICAgICAgICAgICAgICAgICAgICAgIGV2ZW50LnByZXZlbnREZWZhdWx0KClcbiAgICAgICAgICAgICAgICAgICAgICAgICAgb25BZGRTa2lsbChza2lsbClcbiAgICAgICAgICAgICAgICAgICAgICAgIH19XG4gICAgICAgICAgICAgICAgICAgICAgICBjbGFzc05hbWU9XCJmbGV4IHctZnVsbCBpdGVtcy1jZW50ZXIganVzdGlmeS1iZXR3ZWVuIHJvdW5kZWQteGwgcHgtMyBweS0yIHRleHQtbGVmdCB0ZXh0LXNtIHRleHQtc2xhdGUtMjAwIHRyYW5zaXRpb24tY29sb3JzIGhvdmVyOmJnLXdoaXRlL1swLjA2XVwiXG4gICAgICAgICAgICAgICAgICAgICAgPlxuICAgICAgICAgICAgICAgICAgICAgICAgPHNwYW4+e3NraWxsfTwvc3Bhbj5cbiAgICAgICAgICAgICAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT1cInRleHQteHMgdGV4dC1zbGF0ZS01MDBcIj5TdWdnZXN0ZWQ8L3NwYW4+XG4gICAgICAgICAgICAgICAgICAgICAgPC9idXR0b24+XG4gICAgICAgICAgICAgICAgICAgICkpfVxuXG4gICAgICAgICAgICAgICAgICAgIHtjYW5BZGRDdXN0b21Ta2lsbCAmJiAoXG4gICAgICAgICAgICAgICAgICAgICAgPGJ1dHRvblxuICAgICAgICAgICAgICAgICAgICAgICAgdHlwZT1cImJ1dHRvblwiXG4gICAgICAgICAgICAgICAgICAgICAgICBvbk1vdXNlRG93bj17ZXZlbnQgPT4ge1xuICAgICAgICAgICAgICAgICAgICAgICAgICBldmVudC5wcmV2ZW50RGVmYXVsdCgpXG4gICAgICAgICAgICAgICAgICAgICAgICAgIG9uQWRkU2tpbGwodHJpbW1lZFNraWxsUXVlcnkpXG4gICAgICAgICAgICAgICAgICAgICAgICB9fVxuICAgICAgICAgICAgICAgICAgICAgICAgY2xhc3NOYW1lPVwiZmxleCB3LWZ1bGwgaXRlbXMtY2VudGVyIGp1c3RpZnktYmV0d2VlbiByb3VuZGVkLXhsIHB4LTMgcHktMiB0ZXh0LWxlZnQgdGV4dC1zbSB0ZXh0LXNsYXRlLTIwMCB0cmFuc2l0aW9uLWNvbG9ycyBob3ZlcjpiZy13aGl0ZS9bMC4wNl1cIlxuICAgICAgICAgICAgICAgICAgICAgID5cbiAgICAgICAgICAgICAgICAgICAgICAgIDxzcGFuPkFkZCBcInt0cmltbWVkU2tpbGxRdWVyeX1cIjwvc3Bhbj5cbiAgICAgICAgICAgICAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT1cInRleHQteHMgdGV4dC1jeWFuLTMwMFwiPkN1c3RvbTwvc3Bhbj5cbiAgICAgICAgICAgICAgICAgICAgICA8L2J1dHRvbj5cbiAgICAgICAgICAgICAgICAgICAgKX1cbiAgICAgICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgICAgICl9XG4gICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgPC9kaXY+XG5cbiAgICAgICAgICB7c2tpbGxzRXJyb3IgJiYgPHAgY2xhc3NOYW1lPVwibXQtMiB0ZXh0LXNtIHRleHQtcm9zZS0zMDBcIj57c2tpbGxzRXJyb3J9PC9wPn1cbiAgICAgICAgPC9kaXY+XG5cbiAgICAgICAgPGRpdj5cbiAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9XCJtYi0zIGJsb2NrIHRleHQtc20gZm9udC1tZWRpdW0gdGV4dC1zbGF0ZS0xMDBcIj5cbiAgICAgICAgICAgIEV4cGVyaWVuY2UgTGV2ZWwgKlxuICAgICAgICAgIDwvc3Bhbj5cbiAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImdyaWQgZ2FwLTMgbWQ6Z3JpZC1jb2xzLTNcIj5cbiAgICAgICAgICAgIHtleHBlcmllbmNlTGV2ZWxPcHRpb25zLm1hcChvcHRpb24gPT4ge1xuICAgICAgICAgICAgICBjb25zdCBhY3RpdmUgPSBzZWxlY3RlZEV4cGVyaWVuY2VMZXZlbCA9PT0gb3B0aW9uLnZhbHVlXG5cbiAgICAgICAgICAgICAgcmV0dXJuIChcbiAgICAgICAgICAgICAgICA8YnV0dG9uXG4gICAgICAgICAgICAgICAgICBrZXk9e29wdGlvbi52YWx1ZX1cbiAgICAgICAgICAgICAgICAgIHR5cGU9XCJidXR0b25cIlxuICAgICAgICAgICAgICAgICAgb25DbGljaz17KCkgPT4gb25FeHBlcmllbmNlQ2hhbmdlKG9wdGlvbi52YWx1ZSl9XG4gICAgICAgICAgICAgICAgICBjbGFzc05hbWU9e2Byb3VuZGVkLTN4bCBib3JkZXIgcHgtNCBweS00IHRleHQtbGVmdCB0cmFuc2l0aW9uLWFsbCAke1xuICAgICAgICAgICAgICAgICAgICBhY3RpdmVcbiAgICAgICAgICAgICAgICAgICAgICA/ICdib3JkZXItY3lhbi00MDAvNDAgYmctY3lhbi00MDAvMTIgc2hhZG93LVswXzEwcHhfMzBweF9yZ2JhKDYsMTgyLDIxMiwwLjE1KV0nXG4gICAgICAgICAgICAgICAgICAgICAgOiAnYm9yZGVyLXdoaXRlLzEwIGJnLXdoaXRlL1swLjAzXSBob3Zlcjpib3JkZXItY3lhbi00MDAvMjUgaG92ZXI6Ymctd2hpdGUvWzAuMDVdJ1xuICAgICAgICAgICAgICAgICAgfWB9XG4gICAgICAgICAgICAgICAgPlxuICAgICAgICAgICAgICAgICAgPHAgY2xhc3NOYW1lPVwidGV4dC1iYXNlIGZvbnQtc2VtaWJvbGQgdGV4dC13aGl0ZVwiPntvcHRpb24ubGFiZWx9PC9wPlxuICAgICAgICAgICAgICAgICAgPHAgY2xhc3NOYW1lPVwibXQtMiB0ZXh0LXNtIHRleHQtc2xhdGUtNDAwXCI+e29wdGlvbi5kZXNjcmlwdGlvbn08L3A+XG4gICAgICAgICAgICAgICAgPC9idXR0b24+XG4gICAgICAgICAgICAgIClcbiAgICAgICAgICAgIH0pfVxuICAgICAgICAgIDwvZGl2PlxuXG4gICAgICAgICAge2V4cGVyaWVuY2VFcnJvciAmJiAoXG4gICAgICAgICAgICA8cCBjbGFzc05hbWU9XCJtdC0yIHRleHQtc20gdGV4dC1yb3NlLTMwMFwiPntleHBlcmllbmNlRXJyb3J9PC9wPlxuICAgICAgICAgICl9XG4gICAgICAgIDwvZGl2PlxuICAgICAgPC9kaXY+XG4gICAgPC9zZWN0aW9uPlxuICApXG59XG4iXSwiZmlsZSI6IkE6L1JlcXVpcmVtZW50IFN5c3RlbS9zcmMvYXBwL2NvbXBvbmVudHMvY2FuZGlkYXRlL0FwcGxpY2F0aW9uU2tpbGxQaWNrZXIudHN4In0=
